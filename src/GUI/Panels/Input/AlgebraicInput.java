@@ -41,7 +41,7 @@ public class AlgebraicInput extends JPanel implements Input{
             public void actionPerformed(ActionEvent e) {
                 inputBox.checkInput();
                 expression = inputBox.getExpression();
-                Input.writeExpression(directory,expression);
+                Input.write(directory,expression,"Expression",x.toString());
             }
         });
 

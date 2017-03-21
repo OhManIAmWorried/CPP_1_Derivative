@@ -12,7 +12,8 @@ public class SpreadsheetOutput extends JPanel implements Output {
     }
 
     @Override
-    public void showExpression() {
+    public void showDerivative() {
 
     }
+
 }

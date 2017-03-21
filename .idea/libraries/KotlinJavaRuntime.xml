@@ -16,6 +16,7 @@
       <root url="jar://$PROJECT_DIR$/libs/jars/servlet.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/jars/swtgraphics2d.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/jars/jcm1.0-basic.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jars/jcm1.0-config.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

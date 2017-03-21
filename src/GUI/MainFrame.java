@@ -1,6 +1,9 @@
 package GUI;
 
+import GUI.Panels.DeleteDirPanel;
 import GUI.Panels.Input.AlgebraicInput;
+import GUI.Panels.ChangeDirPanel;
+import GUI.Panels.Input.GraphicInput;
 import GUI.Panels.Output.AlgebraicOutput;
 import GUI.Panels.Output.GraphicOutput;
 import GUI.Panels.Output.SpreadsheetOutput;
@@ -20,10 +23,13 @@ public class MainFrame extends JFrame{
     static JButton outputButton;
     static JButton inputButton;
 
+    static ChangeDirPanel changeDirPanel;
+    static DeleteDirPanel deleteDirPanel;
     static JPanel mainPanel;
     static JPanel cardsPanel;
     static CardLayout cl;
     static AlgebraicInput algInp;
+    static GraphicInput gphInp;
     static AlgebraicOutput algOut;
     static SpreadsheetOutput spdOut;
     static GraphicOutput gphOut;
@@ -36,6 +42,7 @@ public class MainFrame extends JFrame{
     static JMenu inputMenu;
     static JMenu outputMenu;
     static JMenuItem algInpMenuItem;
+    static JMenuItem gphInpMenuItem;
     static JMenuItem algOutMenuItem;
     static JMenuItem spdOutMenuItem;
     static JMenuItem gphOutMenuItem;
@@ -50,16 +57,18 @@ public class MainFrame extends JFrame{
     private void setMenuDefaults() {
         fileMenu = new JMenu("File");
         viewMenu = new JMenu("View");
-        changeDirMenuItem = new JMenuItem("Change file directory");
-        deleteDirMenuItem = new JMenuItem("Delete file directory");
+        changeDirMenuItem = new JMenuItem("Change file directory"); //work in progress
+        deleteDirMenuItem = new JMenuItem("Delete file directory"); //work in progress
         inputMenu = new JMenu("Input type");
         outputMenu = new JMenu("Output type");
         algInpMenuItem = new JMenuItem("Algebraical");
+        gphInpMenuItem = new JMenuItem("Graphical");                //work in progress
         algOutMenuItem = new JMenuItem("Algebraical");
-        spdOutMenuItem = new JMenuItem("Spreadsheet");
-        gphOutMenuItem = new JMenuItem("Graphical");
+        spdOutMenuItem = new JMenuItem("Spreadsheet");              //work in progress
+        gphOutMenuItem = new JMenuItem("Graphical");                //work in progress
 
         inputMenu.add(algInpMenuItem);
+        inputMenu.add(gphInpMenuItem);
         outputMenu.add(algOutMenuItem);
         outputMenu.add(spdOutMenuItem);
         outputMenu.add(gphOutMenuItem);
@@ -73,10 +82,36 @@ public class MainFrame extends JFrame{
         menuBar.add(fileMenu);
         menuBar.add(viewMenu);
 
+        changeDirMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cl.show(cardsPanel,"dirChg");
+                inputButton.setEnabled(true);
+                outputButton.setEnabled(true);
+            }
+        });
+
+        deleteDirMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cl.show(cardsPanel,"dirDel");
+                inputButton.setEnabled(true);
+                outputButton.setEnabled(true);
+            }
+        });
+
         algInpMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentInpPanel = "algInp";
+                if (isInput) toInput();
+            }
+        });
+
+        gphInpMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentInpPanel = "gphInp";
                 if (isInput) toInput();
             }
         });
@@ -108,12 +143,19 @@ public class MainFrame extends JFrame{
 
     private void setPanelDefaults() {
         cardsPanel.setLayout(cl);
+
+        changeDirPanel = new ChangeDirPanel();
+        deleteDirPanel = new DeleteDirPanel();
         algInp = new AlgebraicInput();
+        gphInp = new GraphicInput();
         algOut = new AlgebraicOutput();
         spdOut = new SpreadsheetOutput();
         gphOut = new GraphicOutput();
 
+        cardsPanel.add(changeDirPanel,"dirChg");
+        cardsPanel.add(deleteDirPanel,"dirDel");
         cardsPanel.add(algInp,"algInp");
+        cardsPanel.add(gphInp,"gphInp");
         cardsPanel.add(algOut,"algOut");
         cardsPanel.add(spdOut,"spdOut");
         cardsPanel.add(gphOut,"gphOut");
@@ -181,11 +223,13 @@ public class MainFrame extends JFrame{
 
     private MainFrame() {
         super("Project1_GUI");
-        setSize(400,400);
+        setSize(600,440);
+        setMinimumSize(new Dimension(600,440));
         setAlwaysOnTop(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setDefaults();
         setLocationRelativeTo(null);
+        setResizable(true/*false*/);
         setVisible(true);
     }
 
@@ -196,7 +240,13 @@ public class MainFrame extends JFrame{
     public static void setDirectory(String dir) {
         directory = dir;
         algInp.setDirectory(dir);
+        gphInp.setDirectory(dir);
         algOut.setDirectory(dir);
+        gphOut.setDirectory(dir);
+    }
+
+    public static String getDirectory() {
+        return directory;
     }
 
     public static void toOutput() {
